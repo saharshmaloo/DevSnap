@@ -9,7 +9,7 @@ interface AuthContextType {
     loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>({
+const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
 });
