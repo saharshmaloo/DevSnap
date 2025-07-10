@@ -19,8 +19,23 @@ export default function LoginForm() {
         setError('');
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            router.push('/dashboard');
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const idToken = await userCredential.user.getIdToken();
+
+            // Send token to backend to create session cookie
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idToken }),
+            });
+
+            if (response.ok) {
+                router.push('/dashboard');
+            } else {
+                throw new Error('Failed to authenticate');
+            }
         } catch (error: any) {
             setError(error.message);
         } finally {
@@ -33,8 +48,23 @@ export default function LoginForm() {
         setError('');
 
         try {
-            await signInWithPopup(auth, googleProvider);
-            router.push('/dashboard');
+            const userCredential = await signInWithPopup(auth, googleProvider);
+            const idToken = await userCredential.user.getIdToken();
+
+            // Send token to backend to create session cookie
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idToken }),
+            });
+
+            if (response.ok) {
+                router.push('/dashboard');
+            } else {
+                throw new Error('Failed to authenticate');
+            }
         } catch (error: any) {
             setError(error.message);
         } finally {
