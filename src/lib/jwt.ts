@@ -47,12 +47,28 @@ export function clearAuthCookie(response: NextResponse) {
     });
 }
 
+// For API routes (with NextRequest)
 export function getAuthCookie(request: NextRequest): string | undefined {
     return request.cookies.get(COOKIE_NAME)?.value;
 }
 
+// For server components (using next/headers)
+export async function getAuthCookieFromHeaders(): Promise<string | undefined> {
+    const cookieStore = await cookies();
+    return cookieStore.get(COOKIE_NAME)?.value;
+}
+
+// For API routes (with NextRequest)
 export async function getCurrentUser(request: NextRequest) {
     const sessionCookie = getAuthCookie(request);
+    if (!sessionCookie) return null;
+
+    return await verifySessionCookie(sessionCookie);
+}
+
+// For server components (using next/headers)
+export async function getCurrentUserFromHeaders() {
+    const sessionCookie = await getAuthCookieFromHeaders();
     if (!sessionCookie) return null;
 
     return await verifySessionCookie(sessionCookie);

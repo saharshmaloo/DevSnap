@@ -1,4 +1,4 @@
-import { getCurrentUser } from './jwt';
+import { getCurrentUser, getCurrentUserFromHeaders } from './jwt';
 import { NextRequest } from 'next/server';
 import { redirect } from 'next/navigation';
 
@@ -14,4 +14,9 @@ export async function requireAuth(request: NextRequest) {
 
 export async function getAuthUser(request: NextRequest) {
     return await getCurrentUser(request);
+}
+
+// For server components (no request parameter needed)
+export async function getAuthUserFromHeaders() {
+    return await getCurrentUserFromHeaders();
 }

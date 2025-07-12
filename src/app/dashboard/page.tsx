@@ -1,13 +1,8 @@
-import { getAuthUser } from '@/lib/auth';
-import { NextRequest } from 'next/server';
+import { getAuthUserFromHeaders } from '@/lib/auth';
 import DashboardClient from './DashboardClient';
 
-export default async function DashboardPage({
-  request,
-}: {
-  request: NextRequest;
-}) {
-  const user = await getAuthUser(request);
+export default async function DashboardPage() {
+  const user = await getAuthUserFromHeaders();
   
   if (!user) {
     return null; // Will be redirected by middleware or client-side
